@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import "data/MockData.js" as MockData
 
 ApplicationWindow {
     id: window
@@ -13,7 +14,7 @@ ApplicationWindow {
     color: "#101820"
 
     // 中文注释：property 是 QML 对象上的自定义属性，后面可以被 Text 直接绑定使用。
-    property string pageTitle: "风险预警静态页面"
+    property string pageTitle: MockData.pageTitle
     property color panelColor: "#172331"
     property color panelBorderColor: "#2b4f6f"
 
@@ -71,7 +72,7 @@ ApplicationWindow {
                     }
 
                     Text {
-                        text: "筛查入口\n风险分类\n区域概览"
+                        text: MockData.leftItems.join("\n")
                         color: "#b9c8d6"
                         font.family: "Microsoft YaHei"
                         font.pixelSize: 16
@@ -101,19 +102,69 @@ ApplicationWindow {
                         font.bold: true
                     }
 
-                    Rectangle {
+                    Row {
                         width: parent.width
                         height: 120
-                        color: "#1b2c3e"
-                        border.color: "#345f82"
-                        border.width: 1
+                        spacing: 16
 
-                        Text {
-                            anchors.centerIn: parent
-                            text: "核心统计区域"
-                            color: "#dce8f2"
-                            font.family: "Microsoft YaHei"
-                            font.pixelSize: 20
+                        Rectangle {
+                            width: (parent.width - parent.spacing) / 2
+                            height: parent.height
+                            color: "#1b2c3e"
+                            border.color: "#345f82"
+                            border.width: 1
+
+                            Column {
+                                anchors.centerIn: parent
+                                spacing: 8
+
+                                Text {
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    text: MockData.summaryCards[0].value
+                                    color: "#ffffff"
+                                    font.family: "Microsoft YaHei"
+                                    font.pixelSize: 28
+                                    font.bold: true
+                                }
+
+                                Text {
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    text: MockData.summaryCards[0].title
+                                    color: "#b9c8d6"
+                                    font.family: "Microsoft YaHei"
+                                    font.pixelSize: 16
+                                }
+                            }
+                        }
+
+                        Rectangle {
+                            width: (parent.width - parent.spacing) / 2
+                            height: parent.height
+                            color: "#1b2c3e"
+                            border.color: "#345f82"
+                            border.width: 1
+
+                            Column {
+                                anchors.centerIn: parent
+                                spacing: 8
+
+                                Text {
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    text: MockData.summaryCards[1].value
+                                    color: "#ffffff"
+                                    font.family: "Microsoft YaHei"
+                                    font.pixelSize: 28
+                                    font.bold: true
+                                }
+
+                                Text {
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    text: MockData.summaryCards[1].title
+                                    color: "#b9c8d6"
+                                    font.family: "Microsoft YaHei"
+                                    font.pixelSize: 16
+                                }
+                            }
                         }
                     }
 
@@ -126,7 +177,7 @@ ApplicationWindow {
 
                         Text {
                             anchors.centerIn: parent
-                            text: "趋势图 / 表格区域"
+                            text: MockData.centerSections[1]
                             color: "#dce8f2"
                             font.family: "Microsoft YaHei"
                             font.pixelSize: 20
@@ -157,7 +208,7 @@ ApplicationWindow {
                     }
 
                     Text {
-                        text: "异常标签\n风险等级\n待处理事项"
+                        text: MockData.rightItems.join("\n")
                         color: "#b9c8d6"
                         font.family: "Microsoft YaHei"
                         font.pixelSize: 16
@@ -177,7 +228,7 @@ ApplicationWindow {
 
             Text {
                 anchors.centerIn: parent
-                text: "底部状态栏"
+                text: MockData.footerText
                 color: "#9fb3c8"
                 font.family: "Microsoft YaHei"
                 font.pixelSize: 15
