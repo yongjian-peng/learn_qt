@@ -10,6 +10,7 @@ class SmokeTest : public QObject
 private slots:
     void projectSkeletonFilesExist();
     void mainLoadsQmlResource();
+    void mainQmlDefinesDashboardFrame();
     void buildDeploysQtRuntime();
 };
 
@@ -37,6 +38,24 @@ void SmokeTest::mainLoadsQmlResource()
 
     const QByteArray source = file.readAll();
     QVERIFY(source.contains("qrc:/qml/Main.qml"));
+}
+
+// 验证第 2 步页面框架包含顶部、三列主体和底部区域
+void SmokeTest::mainQmlDefinesDashboardFrame()
+{
+    const QDir root(QStringLiteral(TEST_SOURCE_DIR));
+    QFile file(root.filePath(QStringLiteral("qml/Main.qml")));
+    QVERIFY(file.open(QIODevice::ReadOnly | QIODevice::Text));
+
+    const QByteArray source = file.readAll();
+    QVERIFY(source.contains("id: topBar"));
+    QVERIFY(source.contains("id: leftPanel"));
+    QVERIFY(source.contains("id: centerPanel"));
+    QVERIFY(source.contains("id: rightPanel"));
+    QVERIFY(source.contains("id: footerBar"));
+    QVERIFY(source.contains("Row {"));
+    QVERIFY(source.contains("Column {"));
+    QVERIFY(source.contains("anchors.top:"));
 }
 
 void SmokeTest::buildDeploysQtRuntime()
