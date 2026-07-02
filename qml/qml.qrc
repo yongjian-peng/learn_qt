@@ -1,6 +1,9 @@
 <RCC>
     <qresource prefix="/">
         <file alias="qml/Main.qml">Main.qml</file>
+        <file alias="qml/components/AppHeader.qml">components/AppHeader.qml</file>
+        <file alias="qml/components/SectionPanel.qml">components/SectionPanel.qml</file>
+        <file alias="qml/components/StatCard.qml">components/StatCard.qml</file>
         <file alias="qml/data/MockData.js">data/MockData.js</file>
     </qresource>
 </RCC>

@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import "components"
 import "data/MockData.js" as MockData
 
 ApplicationWindow {
@@ -23,22 +24,13 @@ ApplicationWindow {
         anchors.fill: parent
         color: window.color
 
-        Rectangle {
+        AppHeader {
             id: topBar
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: parent.top
-            height: 72
-            color: "#132030"
-
-            Text {
-                anchors.centerIn: parent
-                text: window.pageTitle
-                color: "#f4f7fb"
-                font.family: "Microsoft YaHei"
-                font.pixelSize: 28
-                font.bold: true
-            }
+            title: window.pageTitle
+            rightText: "Mock"
         }
 
         Row {
@@ -50,170 +42,82 @@ ApplicationWindow {
             anchors.margins: 24
             spacing: 16
 
-            Rectangle {
+            SectionPanel {
                 id: leftPanel
                 width: 240
                 height: parent.height
-                color: window.panelColor
-                border.color: window.panelBorderColor
-                border.width: 1
+                title: "左区"
+                panelColor: window.panelColor
+                borderColor: window.panelBorderColor
 
-                Column {
-                    anchors.fill: parent
-                    anchors.margins: 18
-                    spacing: 12
-
-                    Text {
-                        text: "左区"
-                        color: "#ffffff"
-                        font.family: "Microsoft YaHei"
-                        font.pixelSize: 22
-                        font.bold: true
-                    }
-
-                    Text {
-                        text: MockData.leftItems.join("\n")
-                        color: "#b9c8d6"
-                        font.family: "Microsoft YaHei"
-                        font.pixelSize: 16
-                        lineHeight: 1.35
-                    }
+                Text {
+                    text: MockData.leftItems.join("\n")
+                    color: "#b9c8d6"
+                    font.family: "Microsoft YaHei"
+                    font.pixelSize: 16
+                    lineHeight: 1.35
                 }
             }
 
-            Rectangle {
+            SectionPanel {
                 id: centerPanel
                 width: contentRow.width - leftPanel.width - rightPanel.width - contentRow.spacing * 2
                 height: parent.height
-                color: "#0f1b28"
-                border.color: "#3c6f95"
-                border.width: 1
+                title: "中区"
+                panelColor: "#0f1b28"
+                borderColor: "#3c6f95"
 
-                Column {
-                    anchors.fill: parent
-                    anchors.margins: 22
+                Row {
+                    width: parent.width
+                    height: 120
                     spacing: 16
 
+                    StatCard {
+                        width: (parent.width - parent.spacing) / 2
+                        height: parent.height
+                        title: MockData.summaryCards[0].title
+                        value: MockData.summaryCards[0].value
+                    }
+
+                    StatCard {
+                        width: (parent.width - parent.spacing) / 2
+                        height: parent.height
+                        title: MockData.summaryCards[1].title
+                        value: MockData.summaryCards[1].value
+                    }
+                }
+
+                Rectangle {
+                    width: parent.width
+                    height: centerPanel.height - 230
+                    color: "#182638"
+                    border.color: "#345f82"
+                    border.width: 1
+
                     Text {
-                        text: "中区"
-                        color: "#ffffff"
+                        anchors.centerIn: parent
+                        text: MockData.centerSections[1]
+                        color: "#dce8f2"
                         font.family: "Microsoft YaHei"
-                        font.pixelSize: 24
-                        font.bold: true
-                    }
-
-                    Row {
-                        width: parent.width
-                        height: 120
-                        spacing: 16
-
-                        Rectangle {
-                            width: (parent.width - parent.spacing) / 2
-                            height: parent.height
-                            color: "#1b2c3e"
-                            border.color: "#345f82"
-                            border.width: 1
-
-                            Column {
-                                anchors.centerIn: parent
-                                spacing: 8
-
-                                Text {
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    text: MockData.summaryCards[0].value
-                                    color: "#ffffff"
-                                    font.family: "Microsoft YaHei"
-                                    font.pixelSize: 28
-                                    font.bold: true
-                                }
-
-                                Text {
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    text: MockData.summaryCards[0].title
-                                    color: "#b9c8d6"
-                                    font.family: "Microsoft YaHei"
-                                    font.pixelSize: 16
-                                }
-                            }
-                        }
-
-                        Rectangle {
-                            width: (parent.width - parent.spacing) / 2
-                            height: parent.height
-                            color: "#1b2c3e"
-                            border.color: "#345f82"
-                            border.width: 1
-
-                            Column {
-                                anchors.centerIn: parent
-                                spacing: 8
-
-                                Text {
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    text: MockData.summaryCards[1].value
-                                    color: "#ffffff"
-                                    font.family: "Microsoft YaHei"
-                                    font.pixelSize: 28
-                                    font.bold: true
-                                }
-
-                                Text {
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    text: MockData.summaryCards[1].title
-                                    color: "#b9c8d6"
-                                    font.family: "Microsoft YaHei"
-                                    font.pixelSize: 16
-                                }
-                            }
-                        }
-                    }
-
-                    Rectangle {
-                        width: parent.width
-                        height: parent.height - 176
-                        color: "#182638"
-                        border.color: "#345f82"
-                        border.width: 1
-
-                        Text {
-                            anchors.centerIn: parent
-                            text: MockData.centerSections[1]
-                            color: "#dce8f2"
-                            font.family: "Microsoft YaHei"
-                            font.pixelSize: 20
-                        }
+                        font.pixelSize: 20
                     }
                 }
             }
 
-            Rectangle {
+            SectionPanel {
                 id: rightPanel
                 width: 240
                 height: parent.height
-                color: window.panelColor
-                border.color: window.panelBorderColor
-                border.width: 1
+                title: "右区"
+                panelColor: window.panelColor
+                borderColor: window.panelBorderColor
 
-                Column {
-                    anchors.fill: parent
-                    anchors.margins: 18
-                    spacing: 12
-
-                    Text {
-                        text: "右区"
-                        color: "#ffffff"
-                        font.family: "Microsoft YaHei"
-                        font.pixelSize: 22
-                        font.bold: true
-                    }
-
-                    Text {
-                        text: MockData.rightItems.join("\n")
-                        color: "#b9c8d6"
-                        font.family: "Microsoft YaHei"
-                        font.pixelSize: 16
-                        lineHeight: 1.35
-                    }
+                Text {
+                    text: MockData.rightItems.join("\n")
+                    color: "#b9c8d6"
+                    font.family: "Microsoft YaHei"
+                    font.pixelSize: 16
+                    lineHeight: 1.35
                 }
             }
         }
