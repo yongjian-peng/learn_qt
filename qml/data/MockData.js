@@ -10,12 +10,6 @@ var leftItems = [
     "区域概览"
 ]
 
-var rightItems = [
-    "异常标签",
-    "风险等级",
-    "待处理事项"
-]
-
 var summaryCards = [
     { title: "监控企业", value: "12,860", accent: "#3c8dbc" },
     { title: "高风险企业", value: "328", accent: "#d65a4a" },
@@ -35,6 +29,14 @@ var abnormalTags = [
     { name: "企业状态异常", value: 28.40, color: "#d65a4a" },
     { name: "营业期限临近", value: 18.70, color: "#d9a441" },
     { name: "税务非正常户", value: 12.05, color: "#67b26f" }
+]
+
+var trendPoints = [34, 42, 38, 56, 62, 51, 68]
+
+var riskLevels = [
+    { name: "高风险", value: 35, color: "#d65a4a" },
+    { name: "中风险", value: 40, color: "#d9a441" },
+    { name: "低风险", value: 25, color: "#67b26f" }
 ]
 
 var centerSections = [

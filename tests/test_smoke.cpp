@@ -15,6 +15,7 @@ private slots:
     void mockDataKeepsReadableChinese();
     void customQmlComponentsAreRegisteredAndUsed();
     void listRenderingUsesModelsAndDelegates();
+    void simpleChartsUseCanvasPainting();
     void buildDeploysQtRuntime();
 };
 
@@ -148,6 +149,29 @@ void SmokeTest::listRenderingUsesModelsAndDelegates()
     QVERIFY(mainSource.contains("MockData.summaryCards"));
     QVERIFY(mainSource.contains("MockData.riskCompanies"));
     QVERIFY(mainSource.contains("MockData.abnormalTags"));
+}
+
+// 使用 Canvas、onPaint 和 requestPaint 绘制简单图表，并从 Mock 数据读取图表数组
+void simpleChartsUseCanvasPainting()
+{
+    const QDir root(QStringLiteral(TEST_SOURCE_DIR));
+
+    QFile mockFile(root.filePath(QStringLiteral("qml/data/MockData.js")));
+    QVERIFY(mockFile.open(QIODevice::ReadOnly | QIODevice::Text));
+    const QByteArray mockSource = mockFile.readAll();
+    QVERIFY(mockSource.contains("trendPoints"));
+    QVERIFY(mockSource.contains("riskLevels"));
+
+    QFile mainFile(root.filePath(QStringLiteral("qml/Main.qml")));
+    QVERIFY(mainFile.open(QIODevice::ReadOnly | QIODevice::Text));
+
+    const QByteArray mainSource = mainFile.readAll();
+    QVERIFY(mainSource.contains("Canvas {"));
+    QVERIFY(mainSource.contains("onPaint:"));
+    QVERIFY(mainSource.contains("requestPaint()"));
+    QVERIFY(mainSource.contains("getContext(\"2d\")"));
+    QVERIFY(mainSource.contains("MockData.trendPoints"));
+    QVERIFY(mainSource.contains("MockData.riskLevels"));
 }
 
 void SmokeTest::buildDeploysQtRuntime()
