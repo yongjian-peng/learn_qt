@@ -13,6 +13,8 @@ private slots:
     void mainQmlDefinesDashboardFrame();
     void mockDataIsWiredIntoQml();
     void mockDataKeepsReadableChinese();
+    void customQmlComponentsAreRegisteredAndUsed();
+    void listRenderingUsesModelsAndDelegates();
     void buildDeploysQtRuntime();
 };
 
@@ -90,6 +92,62 @@ void SmokeTest::mockDataKeepsReadableChinese()
     QVERIFY(source.contains(QString::fromUtf8("高风险企业").toUtf8()));
     QVERIFY(!source.contains(QString::fromUtf8("椋庨櫓").toUtf8()));
     QVERIFY(!source.contains(QString::fromUtf8("绛涙煡").toUtf8()));
+}
+
+// 新增三个自定义 QML 组件已注册到资源系统，并被 Main.qml 复用
+void customQmlComponentsAreRegisteredAndUsed()
+{
+    const QDir root(QStringLiteral(TEST_SOURCE_DIR));
+
+    const QStringList componentFiles{
+        QStringLiteral("qml/components/AppHeader.qml"),
+        QStringLiteral("qml/components/SectionPanel.qml"),
+        QStringLiteral("qml/components/StatCard.qml")
+    };
+
+    for (const QString& file : componentFiles) {
+        QVERIFY2(QFileInfo::exists(root.filePath(file)), qPrintable(file));
+    }
+
+    QFile resourceFile(root.filePath(QStringLiteral("qml/qml.qrc")));
+    QVERIFY(resourceFile.open(QIODevice::ReadOnly | QIODevice::Text));
+    const QByteArray resourceSource = resourceFile.readAll();
+    QVERIFY(resourceSource.contains("qml/components/AppHeader.qml"));
+    QVERIFY(resourceSource.contains("qml/components/SectionPanel.qml"));
+    QVERIFY(resourceSource.contains("qml/components/StatCard.qml"));
+
+    QFile mainFile(root.filePath(QStringLiteral("qml/Main.qml")));
+    QVERIFY(mainFile.open(QIODevice::ReadOnly | QIODevice::Text));
+    const QByteArray mainSource = mainFile.readAll();
+    QVERIFY(mainSource.contains("import \"components\""));
+    QVERIFY(mainSource.contains("AppHeader {"));
+    QVERIFY(mainSource.contains("SectionPanel {"));
+    QVERIFY(mainSource.contains("StatCard {"));
+}
+
+// Repeater、ListView、delegate、modelData 和 index 渲染列表数据。
+void SmokeTest::listRenderingUsesModelsAndDelegates()
+{
+    const QDir root(QStringLiteral(TEST_SOURCE_DIR));
+
+    QFile mockFile(root.filePath(QStringLiteral("qml/data/MockData.js")));
+    QVERIFY(mockFile.open(QIODevice::ReadOnly | QIODevice::Text));
+    const QByteArray mockSource = mockFile.readAll();
+    QVERIFY(mockSource.contains("summaryCards"));
+    QVERIFY(mockSource.contains("riskCompanies"));
+    QVERIFY(mockSource.contains("abnormalTags"));
+
+    QFile mainFile(root.filePath(QStringLiteral("qml/Main.qml")));
+    QVERIFY(mainFile.open(QIODevice::ReadOnly | QIODevice::Text));
+    const QByteArray mainSource = mainFile.readAll();
+    QVERIFY(mainSource.contains("Repeater {"));
+    QVERIFY(mainSource.contains("ListView {"));
+    QVERIFY(mainSource.contains("delegate:"));
+    QVERIFY(mainSource.contains("modelData"));
+    QVERIFY(mainSource.contains("index"));
+    QVERIFY(mainSource.contains("MockData.summaryCards"));
+    QVERIFY(mainSource.contains("MockData.riskCompanies"));
+    QVERIFY(mainSource.contains("MockData.abnormalTags"));
 }
 
 void SmokeTest::buildDeploysQtRuntime()
